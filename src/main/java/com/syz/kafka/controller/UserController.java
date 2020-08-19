@@ -1,5 +1,6 @@
 package com.syz.kafka.controller;
 
+import com.syz.kafka.config.EnvInitConfig;
 import com.syz.kafka.entity.User;
 import com.syz.kafka.service.UserService;
 import io.swagger.annotations.Api;
@@ -26,6 +27,7 @@ public class UserController {
     @ApiOperation("输入id，请求用户信息，并发送kafka消息")
     public User getById(@PathVariable("id")Long id){
         User user = userService.getById(id);
+        user.setServerName(EnvInitConfig.SERVER);
         userStream.userOut().send(MessageBuilder.withPayload(user).build());
         return user;
     }
