@@ -23,4 +23,7 @@ public interface UserMapper {
 
     @Select("select id,mobile from t_user where id in (#{idList})")
     List<User> getList(@Param("idList") List<Integer> idList);
+
+    @Select("select id,mobile from t_user")
+    List<User>  getAll();
 }

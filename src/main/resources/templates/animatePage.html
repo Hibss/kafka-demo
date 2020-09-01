@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="icon" href="/favicon.ico">
+    <script type="text/javascript">
+        function show() {
+            var inputValue = $('#math').val();
+            if (inputValue.indexOf("执行animate次数：") > -1){
+                inputValue = inputValue.replace("执行animate次数：","");
+            }
+            var count = Number(inputValue) +1;
+            $('#math').val("执行animate次数：" + count);
+            var height = $("#div1").height();
+            if (height >= 280){
+//                alert('height = ' + height);
+                $("#div1").animate({height:"100px"},1900);
+            }else{
+//                alert('height = ' + height);
+                $("#div1").animate({height:"300px"},1900);
+            }
+        }
+        function reset() {
+            $("#div1").animate({height:"100px"},3);
+        }
+        function showMessage() {
+            alert('time 3000ms');
+        }
+        $(document).ready(function () {
+            setInterval(show, 2010);
+//            show();
+        })
+
+    </script>
+</head>
+<body>
+<div id="div1" style="background-color: red;width: 300px;height: 100px;">123
+
+</div>
+<!--<button id="animateShow">show animate</button>-->
+<!--<button id="animateReset">reset animate</button>-->
+<input id="math" value="0" readonly="readonly" disabled="disabled"/>
+<!--<script th:src="@{jquery-3.1.1.js}" type="text/javascript"></script>-->
+
+    </body>
+</html>

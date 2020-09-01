@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DIV字数统计</title>
+    <script>
+        var maxstrlen = 100;
+        function Q(s) {
+            return document.getElementById(s);
+        }
+        function checkWords(c) {
+            var str = c.value;
+            var wck = Q("wordCheck");
+            var length = str.length;
+            if(length>100){
+                wck.innerHTML = "0";
+                c.value =str.substr(0,100);
+            }else{
+                wck.innerHTML = maxstrlen - length;
+            }
+        }
+    </script>
+</head>
+<body>
+<div>
+        <textarea cols="50" rows="5"  name="content" id="content" onkeyup="javascript:checkWords(this);"
+                  onmousedown="javascript:checkWords(this);"></textarea>
+</div>
+<div>
+    还可以输入<span style="font-family: Georgia; font-size: 26px;" id="wordCheck">100</span>个字
+</div>
+
+
+</body>
+</html>

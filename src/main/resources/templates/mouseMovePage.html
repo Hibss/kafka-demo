@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title><script th:src="@{jquery-3.1.1.js}" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+//            init();
+//            show();
+        });
+        function init() {
+
+        }
+
+        window.onload = function () {
+
+            var one = document.getElementById('img1');
+            var pos = getPos('img1');
+//            alert(pos.toJSON());
+            // mousedown鼠标事件：当用户点击鼠标在元素上就会触发该事件
+                // mousemove 鼠标事件：当鼠标指针在元素上移动就会触发此事件
+                /**
+                 * e：指事件，在火狐浏览器中事件用window.event,所以只有把 event
+                 *    所以只有把event传给函数使用。为了兼容火狐和浏览器，一般会在函数里自动
+                 *    重新赋值: e = e || window.event;
+                 */
+                document.addEventListener('mousemove', function (e) {
+                    var x = e.clientX - Number(pos.x);
+                    var y = e.clientY - Number(pos.x);
+                    one.style.left = x + 'px';
+                    one.style.top =  y+ 'px';
+                });
+        }
+
+        function findPosX(obj) {
+            var curleft = 0;
+
+            if (obj.offsetParent) { //返回父类元素，大多说offsetParent返回body
+                while (obj.offsetParent) {//遍历所有父类元素
+                    curleft += obj.offsetLeft;//当前元素的左边距
+                    obj = obj.offsetParent;
+                }
+            } else if (obj.x) curleft += obj.x;
+            return curleft;
+        }
+
+        function findPosY(obj) {
+            var curtop = 0;
+
+            if (obj.offsetParent) {
+                while (obj.offsetParent) {
+
+                    curtop += obj.offsetTop;
+                    obj = obj.offsetParent;
+                }
+            } else if (obj.y) curtop += obj.y;
+            return curtop;
+        }
+        function getPos(id){
+            return {x:findPosX(document.getElementById(id)),y:findPosY(document.getElementById(id))};
+        }
+
+    </script>
+    <style>
+        img{
+            position: absolute;
+            padding: 10px 10px;
+            border: 2px dashed red;
+            cursor: crosshair;
+        }
+    </style>
+    <style>
+        div.nav {
+            width:500px;
+
+        }
+
+        .nav ul {
+            width:500px;
+            overflow:hidden;
+        }
+
+        .nav ul li {
+            width:100px;
+            float:left;
+            list-style:none;
+        }
+
+        .nav ul li ul {
+            display:none;
+        }
+
+        a {
+            display:block;
+            line-height:30px;
+            height:30px;
+            width:100px;
+            background:red;
+            text-decoration:none;
+            text-align:center;
+        }
+
+
+
+        .nav ul li:hover ul {
+            display:block;
+            margin-left:0px;
+            padding-left:0px;
+        }
+
+        .nav ul li:hover a{
+            background-color:black;
+        }
+
+        .nav ul li:hover ul li {
+            list-style:none;
+            float:none;
+            /*text-align:center;*/
+        }
+
+        .nav ul li:hover ul li a {
+            color: #FFFFFF;
+            display:block;
+            height:30px;
+            width:100px;
+            background:black;
+            text-decoration:none;
+            text-align:center;
+        }
+
+        .nav ul li:hover ul li:hover a {
+            background-color:aqua;
+        }
+    </style>
+</head>
+<body>
+
+<div id="nav" class="nav">
+    <ul>
+        <li><a href="#">网站首页</a></li>
+        <li><a href="#">课程大厅</a>
+            <ul>
+                <li><a href="#">JavaScript</a></li>
+                <li><a href="#">jQuery</a></li>
+                <li><a href="#">Ajax</a></li>
+            </ul>
+        </li>
+        <li><a href="#">学习中心</a>
+            <ul>
+                <li><a href="#">视频学习</a></li>
+                <li><a href="#">案例学习</a></li>
+                <li><a href="#">交流平台</a></li>
+            </ul>
+        </li>
+        <li><a href="#">经典案例</a></li>
+        <li><a href="#">关于我们</a></li>
+    </ul>
+</div>
+
+
+<img id="img1" src="2.jpg" width="200px" height="200px"/>
+
+</body>
+</html>
