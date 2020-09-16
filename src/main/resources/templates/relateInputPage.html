@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>联想搜索</title>
+    <script th:src="@{jquery-3.1.1.js}" type="text/javascript"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}" type="text/javascript"></script>
+    <style>
+        .autoSupRelative {
+            position: relative;
+            padding: 0;
+            float: left;
+            z-index: 99;
+        }
+
+        .autoSupAbsolute {
+            position: absolute;
+            left: 0;
+            top: 30px;
+            background: #ffffff;
+            border: 1px solid #ccc;
+            width: 100%;
+            max-height: 240px;
+            overflow-y: auto;
+            margin: 0;
+            padding: 0;
+            box-shadow: 0px 2px 2px #ccc;
+            display: none
+        }
+
+        .autoSupAbsolute li {
+            list-style: none;
+            cursor: pointer;
+            padding: 5px;
+            line-height: 22px;
+            font-size: 12px;
+        }
+
+        .autoSupAbsolute li:hover {
+            background: #2dc3e8;
+            color: #ffffff;
+        }
+    </style>
+    <script>
+        //模糊查询
+        function SearchLike(jsons) {
+            //var timerSerch = null;
+            $(document).on('keyup', '[name=' + jsons.name + ']', function () {
+                var This = this;
+                this.timerSerch = setTimeout(function () {//如果一直输入，就先不查询，等键抬起500毫秒之后再进行查询。
+                    getSearchValue({
+                        This: This,
+                        Event: "keyup",
+                        url: jsons.url,
+                        fun: jsons.fun
+                    });
+                }, 500);
+                $(this).parents('.autoSupRelative').find('.autoSupAbsolute').show();
+            });
+            $(document).on('keydown', '[name=' + jsons.name + ']', function () {
+                var _this = this;
+                clearTimeout(_this.timerSerch);
+
+            });
+            $(document).on('click', '.autoSupAbsolute li', function (e) {
+                var name = $(this).parents('.autoSupRelative').find('input[type=text]').attr('name');
+                if (name == jsons.name) {
+                    var thisHtml = $(this).attr('userName');
+                    if (thisHtml) {
+                        $(this).parents('.autoSupRelative').find('[name=' + jsons.name + ']').val(thisHtml);
+                    }
+                    if (jsons.fun1) {
+                        jsons.fun1(this);
+                    }
+                    $(this).parents('.autoSupRelative').find('[name=' + jsons.name + ']').siblings('ul').html('');
+                    $(this).parents('.autoSupAbsolute').hide();
+                }
+            });
+
+            // $('[name=' + jsons.name + ']').on('click', function (e) {
+            $(document).on('click', '[name=' + jsons.name + ']', function (e) {
+
+                e.stopPropagation();
+                var This = this;
+                $('.autoSupRelative').css({'zIndex': '99'});
+                $(this).parents('.autoSupRelative').css({'zIndex': '100'});
+                $(this).parents('.autoSupRelative').find('.autoSupAbsolute').show();
+                if ($(this).parents('.autoSupRelative').find('ul li').length == 0) {//如果没有输入字段，就不重新检索
+                    $(this).parents('.autoSupRelative').find('ul').html('<div style="padding:0 10px;">数据加载,请稍后....</div>');
+                    getSearchValue({
+                        This: This,
+                        Event: "click",
+                        url: jsons.url,
+                        fun: jsons.fun
+                    });
+                }
+            }).on("blur", function () {
+                $('.autoSupRelative').css({'zIndex': ''});
+            });
+            $(document).on('click', function (e) {
+                $('.autoSupAbsolute').hide();
+            });
+
+            function getSearchValue(json) {
+                if (jsons.setUrl) {
+                    //jsons.setUrl();
+                    json.url = jsons.setUrl();
+                }
+                $.ajaxSetup({cache: true});
+                $.ajax(
+                    {
+                        type: "GET",//POST
+                        url: json.url + encodeURIComponent($(json.This).val()),
+                        success: function (msg) {
+                            if (msg == null || msg == '' || msg == '[]') {
+                                return;
+                            }
+                            var htmlInit = '';
+                            var html = '';
+                            if (json.Event == 'click') {
+                                if (msg.length == 0) {
+                                    $(json.This).next().val('');//清除隐藏域的赋值
+                                    htmlInit = '<div style="text-align:center">未找到此项....</div>';
+                                } else {
+                                    for (var i = 0; i < msg.length; i++) {
+                                        if (json.fun) {
+                                            htmlInit += json.fun(msg[i]);
+                                        } else {
+                                            htmlInit += '<li id="' + msg[i].id + '"userName="' + msg[i].name + '">' + msg[i].name + '</li>';
+                                        }
+                                    }
+                                }
+                                $(json.This).parents('.autoSupRelative').find('.autoSupAbsolute').html(htmlInit);
+                                $(json.This).parents('.autoSupRelative').find('.autoSupAbsolute').show();
+                            }
+                            if (json.Event == 'keyup') {
+                                if ($(json.This).val() == '') {
+                                    $(json.This).parents('.autoSupRelative').find('ul').html('');
+                                    $(json.This).parents('.autoSupRelative').find('.autoSupAbsolute').hide();
+                                } else {
+                                    if (msg.length == 0) {
+                                        $(json.This).next().val('');//清除隐藏域的赋值
+                                        html = '<div style="text-align:center">未找到此项....</div>';
+                                    } else {
+                                        for (var i = 0; i < msg.length; i++) {
+                                            if (json.fun) {
+                                                html += json.fun(msg[i]);
+                                            } else {
+                                                html += '<li id="' + msg[i].id + '" userName="' + msg[i].name + '">' + msg[i].name + '</li>';
+                                            }
+                                        }
+                                    }
+                                    $(json.This).parents('.autoSupRelative').find('.autoSupAbsolute').html(html);
+                                }
+                            }
+                        },
+                        error: function () {
+                            $(json.This).parents('.autoSupRelative').find('ul').html('<div style="padding:10px;">数据加载失败....</div>');
+                        }
+                    }
+                );
+            }
+        }
+
+        // 使用--点击输入框，请求接口--url是联想搜索接口，userName没有值的时候显示所有的列表--下拉列表选择把姓名和id复制给input
+        SearchLike({
+            name: 'userName', url: '/user/userInfo?name=', fun1: function (_this) {
+                $("#userName").val($(_this).attr('userName'));
+                $("input[name=userId]").val($(_this).attr('id'));
+            }
+        });
+    </script>
+</head>
+<body>
+<input type="hidden" name="userId" value="" id="userId"/>
+<div id="nameDiv" class="form-group clearfix">
+    <label for="nameDiv" class="fl">用户姓名：</label>
+    <div id="inline" class="autoSupRelative fl">
+        <input type="text" class="input" name="userName" id="userName" autocomplete="off">
+        <ul class="autoSupAbsolute"></ul>
+    </div>
+</div>
+</body>
+</html>

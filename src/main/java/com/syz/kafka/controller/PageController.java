@@ -1,20 +1,10 @@
 package com.syz.kafka.controller;
 
-import com.google.gson.Gson;
-import com.syz.kafka.entity.User;
 import com.syz.kafka.service.UserService;
-import com.syz.kafka.utils.Errors;
-import com.syz.kafka.utils.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Objects;
 
 @Controller
 public class PageController {
@@ -25,6 +15,16 @@ public class PageController {
     @RequestMapping("math")
     public String mathPage(){
         return "math";
+    }
+
+    @RequestMapping("checkBoxPro")
+    public String checkBoxProPage(){
+        return "checkBoxProPage";
+    }
+
+    @RequestMapping("placeHolder")
+    public String placeHolderPage(){
+        return "placeHolderPage";
     }
 
     @RequestMapping("select")
@@ -67,5 +67,22 @@ public class PageController {
     @RequestMapping("divLength")
     public String divLengthPage(Model model){
         return "divLengthPage";
+    }
+
+    @RequestMapping("relateInput")
+    public String relateInputPage(Model model){
+        return "relateInputPage";
+    }
+    @RequestMapping("loopImage")
+    public String loopImagePage(Model model){
+        return "loopImagePage";
+    }
+    @RequestMapping("loopPanel")
+    public String loopPanelPage(Model model){
+        return "loopPanelPage";
+    }
+    @RequestMapping("elementFind")
+    public String elementFindPage(Model model){
+        return "elementFindPage";
     }
 }

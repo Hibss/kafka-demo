@@ -26,4 +26,7 @@ public interface UserMapper {
 
     @Select("select id,mobile from t_user")
     List<User>  getAll();
+
+    @Select("select * from t_user where name like #{name}")
+    List<User> getByName(String name);
 }

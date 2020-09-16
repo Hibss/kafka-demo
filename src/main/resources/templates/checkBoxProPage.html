@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{bootstrap/css/bootstrap-theme.min.css}" rel="stylesheet" />
+    <script th:src="@{jquery-3.1.1.js}" type="text/javascript"></script>
+    <script th:src="@{bootstrap/js/bootstrap.min.js}" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+    $(function () {
+        $("input[name='setCheckBox']").change(function (event) {
+            var obj = {};
+            if ($("#checkbox1").prop("checked")) {
+                obj[1] = obj[2] = obj[3] = obj[4] = obj[5] = true;
+            }
+            if ($("#checkbox2").prop("checked")) {
+                obj[1] = obj[3] = obj[5] = true;
+            }
+            if ($("#checkbox3").prop("checked")) {
+                obj[3] = obj[4] = true;
+            }
+            for (var i = 1; i <= 5; i++) {
+                $("#input" + i).prop("readonly", obj[i]?'':'readonly');
+            }
+        });
+    });
+</script>
+<div class="row">
+    <div class="col-md-12 order-md-1">
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" class="checkbox" id="checkbox1" value="1" name="setCheckBox">1
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" class="checkbox" id="checkbox2" value="2" name="setCheckBox">2
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" class="checkbox" id="checkbox3" value="3" name="setCheckBox">3
+                    </label>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <br/>
+        <div class="row">
+            <div class="col-md-11 mb-3">
+                <div class="form-group">
+                    <label for="input1">input1</label>
+                    <input type="text" class="form-control" readonly="readonly"  name="input1" id="input1">
+                    <label for="input2">input2</label>
+                    <input type="text" class="form-control" readonly="readonly"  name="input2" id="input2">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-11 mb-3">
+                <div class="form-group">
+                    <label for="input3">input3</label>
+                    <input type="text" class="form-control" readonly="readonly"  name="input3" id="input3">
+                    <label for="input4">input4</label>
+                    <input type="text" class="form-control" readonly="readonly" name="input4" id="input4">
+                    <label for="input5">input5</label>
+                    <input type="text" class="form-control" readonly="readonly" name="input5" id="input5">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

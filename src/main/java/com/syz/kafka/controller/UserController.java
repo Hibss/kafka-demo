@@ -6,10 +6,9 @@ import com.syz.kafka.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("user")
@@ -29,5 +28,12 @@ public class UserController {
         user.setServerName(EnvInitConfig.SERVER);
 //        userStream.userOut().send(MessageBuilder.withPayload(user).build());
         return user;
+    }
+
+    @GetMapping("userInfo")
+    @ApiOperation("输入名称，请求用户信息")
+    public List<User> getByName(@RequestParam("name")String name){
+        List<User> userList = userService.getByName(name);
+        return userList;
     }
 }

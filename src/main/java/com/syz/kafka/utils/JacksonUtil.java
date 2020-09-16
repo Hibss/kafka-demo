@@ -18,6 +18,7 @@ public class JacksonUtil {
     private final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private JacksonUtil() {
+        Math.random();
 
     }
 
